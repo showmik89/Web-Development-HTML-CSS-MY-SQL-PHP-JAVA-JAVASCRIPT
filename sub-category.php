@@ -2,7 +2,7 @@
 session_start();
 error_reporting(0);
 include('includes/config.php');
-$cid=intval($_GET['cid']);
+$cid=intval($_GET['scid']);
 if(isset($_GET['action']) && $_GET['action']=="add"){
 	$id=intval($_GET['id']);
 	if(isset($_SESSION['cart'][$id])){
@@ -13,13 +13,12 @@ if(isset($_GET['action']) && $_GET['action']=="add"){
 		if(mysqli_num_rows($query_p)!=0){
 			$row_p=mysqli_fetch_array($query_p);
 			$_SESSION['cart'][$row_p['id']]=array("quantity" => 1, "price" => $row_p['productPrice']);
-				echo "<script>alert('Product has been added to the cart')</script>";
+								echo "<script>alert('Product has been added to the cart')</script>";
 		echo "<script type='text/javascript'> document.location ='my-cart.php'; </script>";
 		}else{
 			$message="Product ID is invalid";
 		}
 	}
-	
 }
 // COde for Wishlist
 if(isset($_GET['pid']) && $_GET['action']=="wishlist" ){
@@ -111,27 +110,6 @@ header('location:my-wishlist.php');
 		<div class='row outer-bottom-sm'>
 			<div class='col-md-3 sidebar'>
 	            <!-- ================================== TOP NAVIGATION ================================== -->
-<div class="side-menu animate-dropdown outer-bottom-xs">       
-<div class="side-menu animate-dropdown outer-bottom-xs">
-    <div class="head"><i class="icon fa fa-align-justify fa-fw"></i>Sub Categories</div>        
-    <nav class="yamm megamenu-horizontal" role="navigation">
-  
-        <ul class="nav">
-            <li class="dropdown menu-item">
-              <?php $sql=mysqli_query($con,"select id,subcategory  from subcategory where categoryid='$cid'");
-
-while($row=mysqli_fetch_array($sql))
-{
-    ?>
-                <a href="sub-category.php?scid=<?php echo $row['id'];?>" class="dropdown-toggle"><i class="icon fa fa-desktop fa-fw"></i>
-                <?php echo $row['subcategory'];?></a>
-                <?php }?>
-                        
-</li>
-</ul>
-    </nav>
-</div>
-</div><!-- /.side-menu -->
 <!-- ================================== TOP NAVIGATION : END ================================== -->	            <div class="sidebar-module-container">
 	            	<h3 class="section-title">shop by</h3>
 	            	<div class="sidebar-filter">
@@ -172,7 +150,7 @@ while($row=mysqli_fetch_array($sql))
 	<div id="category" class="category-carousel hidden-xs">
 		<div class="item">	
 			<div class="image">
-				<img src="assets/images/banners/cat-banner-1.jpg" alt="" class="img-responsive">
+				<img src="assets/images/banners/cat-banner-2.jpg" alt="" class="img-responsive">
 			</div>
 			<div class="container-fluid">
 				<div class="caption vertical-top text-left">
@@ -180,13 +158,13 @@ while($row=mysqli_fetch_array($sql))
 						<br />
 					</div>
 
-					       <?php $sql=mysqli_query($con,"select categoryName  from category where id='$cid'");
+					       <?php $sql=mysqli_query($con,"select subcategory  from subcategory where id='$cid'");
 while($row=mysqli_fetch_array($sql))
 {
     ?>
 
 					<div class="excerpt hidden-sm hidden-md">
-						<?php echo htmlentities($row['categoryName']);?>
+						<?php echo htmlentities($row['subcategory']);?>
 					</div>
 			<?php } ?>
 			
@@ -201,7 +179,7 @@ while($row=mysqli_fetch_array($sql))
 							<div class="category-product  inner-top-vs">
 								<div class="row">									
 			<?php
-$ret=mysqli_query($con,"select * from products where category='$cid'");
+$ret=mysqli_query($con,"select * from products where subCategory='$cid'");
 $num=mysqli_num_rows($ret);
 if($num>0)
 {
@@ -234,8 +212,7 @@ while ($row=mysqli_fetch_array($ret))
 				<div class="action">
 					<ul class="list-unstyled">
 						<li class="add-cart-button btn-group">
-						
-								<?php if($row['productAvailability']=='In Stock'){?>
+						<?php if($row['productAvailability']=='In Stock'){?>
 										<button class="btn btn-primary icon" data-toggle="dropdown" type="button">
 								<i class="fa fa-shopping-cart"></i>													
 							</button>
